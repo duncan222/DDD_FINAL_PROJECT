@@ -1,0 +1,33 @@
+<!-- staff-page.component.html -->
+<div *ngIf="products">
+    <h1>Staff Page</h1>
+    <button (click)="addProduct()">Add Product</button>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Type</th>
+        <th>Brand</th>
+        <th>Size</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let product of products">
+        <td>{{ product.productid }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.category }}</td>
+        <td>{{ product.type }}</td>
+        <td>{{ product.brand }}</td>
+        <td>{{ product.size }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.price }}</td>
+        <td>
+          <button (click)="modifyProduct(product.productid)">Modify</button>
+          <button (click)="deleteProduct(product.productid)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  

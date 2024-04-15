@@ -1,0 +1,36 @@
+<div class="add-product">
+    <h2>Add Product</h2>
+    <div>
+      <label>Name:</label>
+      <input type="text" [(ngModel)]="product.name">
+    </div>
+    <div>
+      <label>Category:</label>
+      <input type="text" [(ngModel)]="product.category">
+    </div>
+    <div>
+      <label>Type:</label>
+      <input type="text" [(ngModel)]="product.type">
+    </div>
+    <div>
+      <label>Brand:</label>
+      <input type="text" [(ngModel)]="product.brand">
+    </div>
+    <div>
+      <label>Size:</label>
+      <input type="text" [(ngModel)]="product.size">
+    </div>
+    <div>
+      <label>Description:</label>
+      <textarea [(ngModel)]="product.description"></textarea>
+    </div>
+    <div>
+      <label>Price:</label>
+      <input type="number" [(ngModel)]="product.price">
+    </div>
+    <div class="actions">
+      <button (click)="cancel()">Cancel</button>
+      <button (click)="save()">Save</button>
+    </div>
+  </div>
+  

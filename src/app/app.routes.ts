@@ -6,6 +6,8 @@ import { StaffSignupComponent } from './staff-signup/staff-signup.component';
 import { CustomerLoginComponent } from './customer-login/customer-login.component';
 import { StaffLoginComponent } from './staff-login/staff-login.component';
 import { ShoppingPageComponent } from './shopping-page/shopping-page.component';
+import { StaffHomeComponent } from './staff-home/staff-home.component';
+import { AddProductComponent } from './add-product/add-product.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/choose-role', pathMatch: 'full' },
@@ -14,7 +16,9 @@ export const routes: Routes = [
     { path: 'staff-signup', component: StaffSignupComponent},
     { path: 'customer-login', component: CustomerLoginComponent},
     { path: 'staff-login', component: StaffLoginComponent},
-    { path: 'shopping', component: ShoppingPageComponent}
+    { path: 'shopping', component: ShoppingPageComponent},
+    { path: 'staff-home', component: StaffHomeComponent},
+    { path: 'add-product', component: AddProductComponent}
 ];
 
 @NgModule({
