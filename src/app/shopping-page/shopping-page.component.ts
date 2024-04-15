@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-shopping-page',
   standalone: true,
-  imports: [],
+  imports: [HttpClientModule],
   templateUrl: './shopping-page.component.html',
   styleUrl: './shopping-page.component.css'
 })

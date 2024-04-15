@@ -1,5 +1,8 @@
 const express = require("express");
+const cors = require('cors');
 const app = express();
+app.use(cors());
+app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
@@ -12,8 +15,8 @@ const { Pool } = require("pg");
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "DDD_FINAL_DB",
-  password: "duncan123",
+  database: "project",
+  password: "dddpostgres",
   port: 5432,
 });
 
@@ -42,6 +45,23 @@ app.post("/api/items", (req, res) => {
   pool.query(
     "INSERT INTO items (name, description) VALUES ($1, $2) RETURNING *",
     [name, description],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+app.post("/api/customer", (req, res) => {
+  const { name, balance, paymentaddress, deliveryaddress } = req.body;
+
+  pool.query(
+    "INSERT INTO customer (name, balance, paymentaddress, deliveryaddress) VALUES ($1, $2, $3, $4) RETURNING *",
+    [name, balance, paymentaddress, deliveryaddress],
     (err, result) => {
       if (err) {
         console.error("Error executing query:", err);
