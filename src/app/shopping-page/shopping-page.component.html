@@ -1,0 +1,35 @@
+
+<h1>Online Store Application</h1>
+
+<!-- needs to be search, list, and shopping cart selection. -->
+
+<div class="col-4 cart">
+    <div class="card" style="width: 18rem;">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <h5 class="card-title">Shopping Cart</h5>
+          <p class="card-text">This will be the shopping cart.</p>
+          <!-- <div *ngFor="item of items"></div> -->
+          <a href="#" class="btn btn-primary">CheckOut</a>
+        </div>
+    </div>
+</div>
+<div class="col-8 items">
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">
+            <div class="input-group rounded">
+                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                <span class="input-group-text border-0" id="search-addon">
+                  <i class="fas fa-search"></i>
+                </span>
+            </div>
+        </div>
+        <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Products</h5>
+          <!-- <div *ngFor="item of items"></div> -->
+          <p class="card-text">All the products listed here.</p>
+        </div>
+    </div>
+</div>
+<p>{{ message }}</p>
