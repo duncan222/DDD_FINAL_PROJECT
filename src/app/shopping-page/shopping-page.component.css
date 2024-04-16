@@ -3,3 +3,62 @@
     grid-gap: 10px;
 }
 
+.items{ 
+    height: auto;
+}
+
+.desc{ 
+    font-size: small;
+
+}
+
+h6 .category{ 
+    font-size: smaller;
+    font-style: normal !important;
+    font-weight: normal;
+ }
+
+.details { 
+    margin-left: 15px;
+}
+
+
+.product-box{ 
+    border: solid 2px;
+    border-color: rgb(203, 202, 204);
+    height: auto;
+    display: flex;
+}
+
+.space_empty{ 
+    height: 1rem;;
+}
+
+.price{ 
+    justify-self: end;
+    padding-right: 15px;
+    color: rgb(128, 2, 0);
+    font-weight: bold;
+    
+}
+
+.price-label{ 
+    font-weight: normal;
+    color: black;
+    font-size: smaller;
+}
+
+.add{ 
+    background-color: rgb(174, 238, 174);
+    border-radius: .5rem;
+    height: 2rem;
+    font-size: small; 
+    width: auto;
+    text-align: center;
+
+}
+
+.price-right{
+    padding-right: 20px;
+    padding-top: 5px;
+}
