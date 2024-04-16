@@ -39,6 +39,26 @@ app.get("/api/items", (req, res) => {
   });
 });
 
+//get by staff name
+app.get("/api/staff/:name", (req, res) => {
+  const { name } = req.params;
+
+  pool.query(
+    "SELECT * FROM staff WHERE name = $1",
+    [name],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
 app.get("/api/product", (req, res) => {
   pool.query("SELECT * FROM product", (err, result) => {
     if (err) {
@@ -140,6 +160,27 @@ app.put("/api/items/:id", (req, res) => {
   );
 });
 
+app.put("/api/product/:id", (req, res) => {
+  const { id } = req.params;
+  const { name, category, type, brand, size, description, price } = req.body;
+
+  pool.query(
+    "UPDATE product SET name = $1, category = $2, type = $3, brand = $4, size = $5, description = $6, price = $7 WHERE productid = $8",
+    [name, category, type, brand, size, description, price, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rowCount === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json({ message: "Product updated successfully" });
+      }
+    }
+  );
+});
+
+
 app.delete("/api/items/:id", (req, res) => {
   const { id } = req.params;
 
@@ -164,6 +205,25 @@ app.delete("/api/product/:id", (req, res) => {
 
   pool.query(
     "DELETE FROM product WHERE productid = $1 RETURNING *",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+app.get("/api/product/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool.query(
+    "SELECT * FROM product WHERE productid = $1",
     [id],
     (err, result) => {
       if (err) {
