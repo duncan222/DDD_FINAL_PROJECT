@@ -70,6 +70,17 @@ app.get("/api/warehouse", (req, res) => {
   });
 });
 
+app.get("/api/orders", (req, res) => {
+  pool.query("SELECT * FROM orders", (err, result) => {
+    if (err) {
+      console.error("Error fetching orders", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.json(result.rows);
+    }
+  });
+});
+
 app.get("/api/customer", (req, res) => {
   pool.query("SELECT * FROM customer", (err, result) => {
     if (err) {

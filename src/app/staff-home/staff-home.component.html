@@ -71,5 +71,24 @@
       </tr>
     </table>
   </div>
+  <div *ngIf="orders">
+    <h3>Order Processing</h3>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Product</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let order of orders">
+        <td>{{ order.orderid }}</td>
+        <td>{{ order.orderedproduct }}</td>
+        <td>{{ order.status }}</td>
+        <td>
+          <button (click)="processOrder(order.orderid)">Change Order Status</button>
+        </td>
+      </tr>
+    </table>
+  </div>
   <button (click)="logout()">Log Out</button>
   

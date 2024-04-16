@@ -19,12 +19,13 @@ export class StaffHomeComponent {
   products: any[] = [];
   warehouses: any[] = [];
   customers: any[] = [];
+  orders: any[] = [];
 
   ngOnInit(): void {
     this.getProducts();
     this.getWarehouses();
     this.getCustomers();
-    this.calculateTotalStock();
+    this.getOrders();
   }
 
   getProducts(): void {
@@ -70,6 +71,17 @@ export class StaffHomeComponent {
     );
   }
 
+  getOrders(): void {
+    this.http.get<any[]>('http://localhost:3000/api/orders').subscribe(
+      (response) => {
+        this.orders = response;
+      },
+      (error) => {
+        console.error('Error', error);
+      }
+    );
+  }
+
   addProduct(): void {
     this.router.navigateByUrl('/add-product');
   }
@@ -107,16 +119,16 @@ export class StaffHomeComponent {
     );
   }
 
-  calculateTotalStock(): void {
-
-  }
-
   addStock(warehouseid: number): void {
     this.router.navigate(['/add-stock', warehouseid]);
   }
 
   seeCustomerDetails(customerid: number): void {
     this.router.navigate(['/view-customer', customerid]);
+  }
+
+  processOrder(orderid: number): void {
+
   }
 
   logout(): void {
