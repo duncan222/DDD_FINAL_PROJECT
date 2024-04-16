@@ -38,6 +38,7 @@ export class StaffHomeComponent {
   }
 
   modifyProduct(productId: number): void {
+    this.router.navigate(['/modify-product', productId]);
   }
 
   deleteProduct(productId: number): void {
@@ -51,5 +52,10 @@ export class StaffHomeComponent {
         console.error('Error deleting product', error);
       }
     );
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/choose-role');
   }
 }

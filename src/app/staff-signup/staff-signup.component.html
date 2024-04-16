@@ -4,3 +4,6 @@
     <input type="text" id="name" placeholder="Staff Name" [(ngModel)]="name">
     <button (click)="createAccount()">Create Account</button>
 </div>
+<div class="text-login">
+    Already have a staff account? <a [routerLink]="['/staff-login']">Login</a> here.
+</div>
