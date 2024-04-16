@@ -1,6 +1,8 @@
 <!-- staff-page.component.html -->
 <div *ngIf="products">
     <h1>Staff Page</h1>
+    <button (click)="editStaffAccount()">Edit Account Details</button>
+    <h3>Products</h3>
     <button (click)="addProduct()">Add Product</button>
     <table>
       <tr>
@@ -26,6 +28,43 @@
         <td>
           <button (click)="modifyProduct(product.productid)">Modify</button>
           <button (click)="deleteProduct(product.productid)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="warehouses">
+    <h3>Warehouses</h3>
+    <button (click)="addWarehouse()">Add Warehouse</button>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Location</th>
+        <th>Stock</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let warehouse of warehouses">
+        <td>{{ warehouse.warehouseid }}</td>
+        <td>{{ warehouse.location }}</td>
+        <td>{{ warehousestock }}</td>
+        <td>
+          <button (click)="modifyStock(warehouse.warehouseid)">Modify Stock</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="customers">
+    <h3>Customers</h3>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let customer of customers">
+        <td>{{ customer.customerid }}</td>
+        <td>{{ customer.name }}</td>
+        <td>
+          <button (click)="seeCustomerDetails(customer.customerid)">View All Details</button>
         </td>
       </tr>
     </table>

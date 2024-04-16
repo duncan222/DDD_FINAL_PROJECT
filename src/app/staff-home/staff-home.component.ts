@@ -17,9 +17,14 @@ export class StaffHomeComponent {
   constructor(private router: Router, private http: HttpClient, private authService: AuthService) {}
 
   products: any[] = [];
+  warehouses: any[] = [];
+  warehousestock: number = 0;
+  customers: any[] = [];
 
   ngOnInit(): void {
     this.getProducts();
+    this.getWarehouses();
+    this.getCustomers();
   }
 
   getProducts(): void {
@@ -33,8 +38,34 @@ export class StaffHomeComponent {
     );
   }
 
+  getWarehouses(): void {
+    this.http.get<any[]>('http://localhost:3000/api/warehouse').subscribe(
+      (response) => {
+        this.warehouses = response;
+      },
+      (error) => {
+        console.error('Error', error);
+      }
+    );
+  }
+
+  getCustomers(): void {
+    this.http.get<any[]>('http://localhost:3000/api/customer').subscribe(
+      (response) => {
+        this.customers = response;
+      },
+      (error) => {
+        console.error('Error', error);
+      }
+    );
+  }
+
   addProduct(): void {
     this.router.navigateByUrl('/add-product');
+  }
+
+  addWarehouse(): void {
+    this.router.navigateByUrl('/add-warehouse');
   }
 
   modifyProduct(productId: number): void {
@@ -54,8 +85,20 @@ export class StaffHomeComponent {
     );
   }
 
+  modifyStock(warehouseid: number): void {
+
+  }
+
+  seeCustomerDetails(customerid: number): void {
+    
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigateByUrl('/choose-role');
+  }
+
+  editStaffAccount(): void {
+    this.router.navigateByUrl('/edit-staff');
   }
 }

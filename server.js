@@ -15,8 +15,8 @@ const { Pool } = require("pg");
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "DDD_FINAL_DB",
-  password: "duncan123",
+  database: "project",
+  password: "dddpostgres",
   port: 5432,
 });
 
@@ -68,6 +68,45 @@ app.get("/api/product", (req, res) => {
       res.json(result.rows);
     }
   });
+});
+
+app.get("/api/warehouse", (req, res) => {
+  pool.query("SELECT * FROM warehouse", (err, result) => {
+    if (err) {
+      console.error("Error fetching products", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.json(result.rows);
+    }
+  });
+});
+
+app.get("/api/customer", (req, res) => {
+  pool.query("SELECT * FROM customer", (err, result) => {
+    if (err) {
+      console.error("Error fetching customers", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.json(result.rows);
+    }
+  });
+});
+
+app.post("/api/warehouse", (req, res) => {
+  const { location } = req.body;
+
+  pool.query(
+    "INSERT INTO warehouse (location) VALUES ($1) RETURNING *",
+    [location],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
 });
 
 app.post("/api/product", (req, res) => {
@@ -180,6 +219,26 @@ app.put("/api/product/:id", (req, res) => {
   );
 });
 
+app.put("/api/staff/id/:id", (req, res) => {
+  const { id } = req.params;
+  const { name, address, salary, jobtitle } = req.body;
+
+  pool.query(
+    "UPDATE staff SET name = $1, address = $2, salary = $3, jobtitle = $4 WHERE staffid = $5",
+    [name, address, salary, jobtitle, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rowCount === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json({ message: "Staff updated successfully" });
+      }
+    }
+  );
+});
+
 
 app.delete("/api/items/:id", (req, res) => {
   const { id } = req.params;
@@ -224,6 +283,26 @@ app.get("/api/product/:id", (req, res) => {
 
   pool.query(
     "SELECT * FROM product WHERE productid = $1",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+//get by staff id
+app.get("/api/staff/id/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool.query(
+    "SELECT * FROM staff WHERE staffid = $1",
     [id],
     (err, result) => {
       if (err) {

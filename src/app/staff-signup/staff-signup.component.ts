@@ -13,12 +13,15 @@ import { AuthService } from '../../services/auth.service';
 })
 export class StaffSignupComponent {
   name: string = '';
+  address: string = '';
+  salary: number = 0;
+  jobtitle: string = '';
   staffId: number = 0;
 
   constructor(private router: Router, private http: HttpClient, private authService: AuthService) {}
 
   createAccount(): void {
-    this.http.post<any>('http://localhost:3000/api/staff', { name: this.name, address: 'Staff Road, Staffville, Ohio', salary: 50000.00, jobtitle: 'Worker'}).subscribe(
+    this.http.post<any>('http://localhost:3000/api/staff', { name: this.name, address: this.address, salary: this.salary, jobtitle: this.jobtitle}).subscribe(
       (response) => {
         console.log('Staff registration successfull', response);
         this.staffId = response.staffid;
