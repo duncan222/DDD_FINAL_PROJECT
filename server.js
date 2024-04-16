@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require('cors');
+const cors = require("cors");
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -15,8 +15,8 @@ const { Pool } = require("pg");
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "project",
-  password: "dddpostgres",
+  database: "DDD_FINAL_DB",
+  password: "duncan123",
   port: 5432,
 });
 
@@ -96,7 +96,7 @@ app.post("/api/customer", (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
       } else {
         const customerId = result.rows[0].customerid;
-        res.json({ customerid: customerId})
+        res.json({ customerid: customerId });
       }
     }
   );
@@ -114,7 +114,7 @@ app.post("/api/staff", (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
       } else {
         const staffId = result.rows[0].staffid;
-        res.json({ staffid: staffId})
+        res.json({ staffid: staffId });
       }
     }
   );
