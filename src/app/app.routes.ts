@@ -11,6 +11,8 @@ import { AddProductComponent } from './add-product/add-product.component';
 import { ModifyProductComponent } from './modify-product/modify-product.component';
 import { EditStaffComponent } from './edit-staff/edit-staff.component';
 import { AddWarehouseComponent } from './add-warehouse/add-warehouse.component';
+import { ViewCustomerComponent } from './view-customer/view-customer.component';
+import { AddStockComponent } from './add-stock/add-stock.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/choose-role', pathMatch: 'full' },
@@ -24,7 +26,9 @@ export const routes: Routes = [
     { path: 'add-product', component: AddProductComponent},
     { path: 'modify-product/:productId', component: ModifyProductComponent},
     { path: 'edit-staff', component: EditStaffComponent},
-    { path: 'add-warehouse', component: AddWarehouseComponent}
+    { path: 'add-warehouse', component: AddWarehouseComponent},
+    { path: 'view-customer/:customerid', component: ViewCustomerComponent},
+    { path: 'add-stock/:warehouseid', component: AddStockComponent}
 ];
 
 @NgModule({

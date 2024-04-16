@@ -169,6 +169,24 @@ app.post("/api/staff", (req, res) => {
   );
 });
 
+app.post("/api/productstock", (req, res) => {
+  const { warehouseid, productid } = req.body;
+
+  pool.query(
+    "INSERT INTO productstock (warehouseid, productid) VALUES ($1, $2) RETURNING *",
+    [warehouseid, productid],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        const staffId = result.rows[0].staffid;
+        res.json({ staffid: staffId });
+      }
+    }
+  );
+});
+
 app.put("/api/product/:id", (req, res) => {
   const { id } = req.params;
   const { name, category, type, brand, size, description, price, quantity } = req.body;
@@ -228,6 +246,25 @@ app.delete("/api/product/:id", (req, res) => {
   );
 });
 
+app.delete("/api/productstock/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool.query(
+    "DELETE FROM productstock WHERE productid = $1 RETURNING *",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
 app.get("/api/product/:id", (req, res) => {
   const { id } = req.params;
 
@@ -242,6 +279,25 @@ app.get("/api/product/:id", (req, res) => {
         res.status(404).json({ error: "Item not found" });
       } else {
         res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+app.get("/api/productstock/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool.query(
+    "SELECT * FROM productstock WHERE warehouseid = $1",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows);
       }
     }
   );
@@ -266,3 +322,67 @@ app.get("/api/staff/id/:id", (req, res) => {
     }
   );
 });
+
+//get by customer id
+app.get("/api/customer/id/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool.query(
+    "SELECT * FROM customer WHERE customerid = $1",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+//get by address id
+app.get("/api/addresses/id/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool.query(
+    "SELECT * FROM addresses WHERE uniqueaddressid = $1",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+//get total stock of a warehouse
+app.get("/api/totalstock/id/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool.query(
+    "SELECT ps.WarehouseID, SUM(p.Quantity) AS TotalStock FROM ProductStock ps JOIN Product p ON ps.ProductID = p.ProductID WHERE ps.WarehouseID = $1 GROUP BY ps.WarehouseID",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+
+
+

@@ -18,13 +18,13 @@ export class StaffHomeComponent {
 
   products: any[] = [];
   warehouses: any[] = [];
-  warehousestock: number = 0;
   customers: any[] = [];
 
   ngOnInit(): void {
     this.getProducts();
     this.getWarehouses();
     this.getCustomers();
+    this.calculateTotalStock();
   }
 
   getProducts(): void {
@@ -40,8 +40,18 @@ export class StaffHomeComponent {
 
   getWarehouses(): void {
     this.http.get<any[]>('http://localhost:3000/api/warehouse').subscribe(
-      (response) => {
-        this.warehouses = response;
+      (warehouses) => {
+        this.warehouses = warehouses;
+        for (const warehouse of warehouses) {
+          this.http.get<any>(`http://localhost:3000/api/totalstock/id/${warehouse.warehouseid}`).subscribe(
+            (response) => {
+              warehouse.totalstock = response.totalstock;
+            },
+            (error) => {
+              console.error('Error', error);
+            }
+          );
+        }
       },
       (error) => {
         console.error('Error', error);
@@ -75,8 +85,7 @@ export class StaffHomeComponent {
   deleteProduct(productId: number): void {
     this.http.delete<any>(`http://localhost:3000/api/product/${productId}`).subscribe(
       () => {
-        console.log('Product deleted successfully');
-        //refresh
+        console.log('Product deleted from product successfully');
         window.location.reload();
       },
       (error) => {
@@ -85,12 +94,29 @@ export class StaffHomeComponent {
     );
   }
 
-  modifyStock(warehouseid: number): void {
+  deleteFromProductStock(productId: number): void {
+    this.http.delete<any>(`http://localhost:3000/api/productstock/${productId}`).subscribe(
+      () => {
+        console.log('Product deleted from product stock successfully');
+        //refresh
+        this.deleteProduct(productId);
+      },
+      (error) => {
+        console.error('Error deleting product', error);
+      }
+    );
+  }
+
+  calculateTotalStock(): void {
 
   }
 
+  addStock(warehouseid: number): void {
+    this.router.navigate(['/add-stock', warehouseid]);
+  }
+
   seeCustomerDetails(customerid: number): void {
-    
+    this.router.navigate(['/view-customer', customerid]);
   }
 
   logout(): void {
