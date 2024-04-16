@@ -1,8 +1,25 @@
 .spacing { 
     display: grid;
     grid-gap: 10px;
+    margin-left: 2rem;
+    padding-bottom: 1rem;
+    font-family: 'Poppins', sans-serif;
+
 }
 
+h1, h2, h3, h4, h5{ 
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+}
+
+
+
+.card-header{ 
+    background-color: rgb(177, 221, 245) !important;
+}
+.card{ 
+    background-color:  rgb(221, 238, 247) ;
+}
 .items{ 
     height: auto;
 }
@@ -11,6 +28,8 @@
     font-size: small;
 
 }
+
+
 
 h6 .category{ 
     font-size: smaller;
@@ -25,10 +44,34 @@ h6 .category{
 
 .product-box{ 
     border: solid 2px;
-    border-color: rgb(203, 202, 204);
+    border-color: rgb(207, 218, 222);
+    background-color:  rgb(206, 231, 245) ;
     height: auto;
     display: flex;
+    border-radius: .5rem;
 }
+
+.page-title{ 
+    margin-left: 3rem;
+}
+.separate{ 
+    width: auto;
+    height: 1px; 
+    background-color: rgb(186, 186, 186);
+
+
+}
+
+.checkout{ 
+    width: auto; 
+    height: 2.5rem;
+    text-align: center;
+    align-items: center;
+    margin-left: auto;  
+    position: relative;
+    margin-left: 13rem;  
+}
+
 
 .space_empty{ 
     height: 1rem;;
@@ -42,10 +85,29 @@ h6 .category{
     
 }
 
+.quantity{ 
+    justify-self: end;
+    padding-right: 15px;
+    color: rgb(17, 17, 17);
+    font-weight: bold;
+    
+}
+
 .price-label{ 
     font-weight: normal;
     color: black;
     font-size: smaller;
+}
+
+.remove{ 
+    background-color: rgb(237, 56, 56);
+    color: whitesmoke;
+    border-radius: .5rem;
+    height: 2rem;
+    font-size: small; 
+    width: auto;
+    text-align: center;
+
 }
 
 .add{ 
@@ -56,6 +118,20 @@ h6 .category{
     width: auto;
     text-align: center;
 
+}
+
+.cart{ 
+    margin-left: 40rem;
+    position: absolute;
+    margin-top: 2rem;
+}
+
+.items{ 
+    position: absolute;
+    margin-top: 1rem;
+}
+.product-box{ 
+    padding-top: 10px;
 }
 
 .price-right{

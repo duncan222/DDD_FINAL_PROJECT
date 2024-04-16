@@ -1,8 +1,8 @@
 <h2>Create your staff account</h2>
 <div>
     <label for="name">Name:</label>
-    <input type="text" id="name" placeholder="Staff Name" [(ngModel)]="name">
-    <button (click)="createAccount()">Create Account</button>
+    <input class="form-control rounded" type="text" id="name" placeholder="Staff Name" [(ngModel)]="name">
+    <button class="btn" (click)="createAccount()">Create Account</button>
 </div>
 <div class="text-login">
     Already have a staff account? <a [routerLink]="['/staff-login']">Login</a> here.

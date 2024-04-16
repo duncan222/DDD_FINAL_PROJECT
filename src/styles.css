@@ -1,10 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+body{ 
+    font-family: 'Poppins', sans-serif;
+    background-color:  rgb(182, 224, 247)  !important;
+}
+
 :root{
-    
+
 color: whitesmoke;
-background-color: rgb(77, 69, 92);
+background-color: rgba(131, 255, 253, 0.31);
+
+.form-control{ 
+    max-width: 15rem;
+}
+
+font-family: 'Poppins', sans-serif;
+
+body{ 
+    font-family: 'Poppins', sans-serif;
+}
+
+.card-header{ 
+    background-color: rgb(177, 221, 245) !important;
+}
+.card{ 
+    background-color:  rgb(221, 238, 247) ;
+}
 
 .btn{ 
+    border-radius: .5rem;
+    font-size: small;
+    border-color: rgba(0, 0, 0, 0.36);
     transition: all 0.3s ease-in-out !important;
 }
 

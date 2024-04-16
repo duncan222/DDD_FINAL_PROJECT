@@ -2,35 +2,35 @@
     <h2>Add Product</h2>
     <div>
       <label>Name:</label>
-      <input type="text" [(ngModel)]="product.name">
+      <input class="form-control rounded" type="text" [(ngModel)]="product.name">
     </div>
     <div>
       <label>Category:</label>
-      <input type="text" [(ngModel)]="product.category">
+      <input class="form-control rounded" type="text" [(ngModel)]="product.category">
     </div>
     <div>
       <label>Type:</label>
-      <input type="text" [(ngModel)]="product.type">
+      <input  class="form-control rounded" type="text" [(ngModel)]="product.type">
     </div>
     <div>
       <label>Brand:</label>
-      <input type="text" [(ngModel)]="product.brand">
+      <input class="form-control rounded"  type="text" [(ngModel)]="product.brand">
     </div>
     <div>
       <label>Size:</label>
-      <input type="text" [(ngModel)]="product.size">
+      <input class="form-control rounded" type="text" [(ngModel)]="product.size">
     </div>
     <div>
       <label>Description:</label>
-      <textarea [(ngModel)]="product.description"></textarea>
+      <textarea class="form-control rounded" [(ngModel)]="product.description"></textarea>
     </div>
     <div>
       <label>Price:</label>
-      <input type="number" [(ngModel)]="product.price">
+      <input  class="form-control rounded" type="number" [(ngModel)]="product.price">
     </div>
     <div class="actions">
-      <button (click)="cancel()">Cancel</button>
-      <button (click)="save()">Save</button>
+      <button class="btn" (click)="cancel()">Cancel</button>
+      <button class="btn"(click)="save()">Save</button>
     </div>
   </div>
   

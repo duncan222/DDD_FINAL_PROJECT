@@ -1,49 +1,83 @@
 
-<h1>Online Store Application</h1>
+<br>
+<h1 class="page-title">Online Store Application</h1>
+<br>
 
 <!-- needs to be search, list, and shopping cart selection. -->
 
-<div class="row spacing">
+<div class="spacing">
 <div class="cart">
-    <div class="card" style="width: 18rem;">
-        <div class="card-header"></div>
-        <div class="card-body">
-          <h5 class="card-title">Shopping Cart</h5>
-          <p class="card-text">This will be the shopping cart.</p>
-          <!-- <div *ngFor="item of items"></div> -->
-          <a href="#" class="btn btn-primary">CheckOut</a>
+    <div class="card" style="width:25rem;">
+        <div class="card-header">          
+            <h5 class="card-title">Shopping Cart</h5>
+            <h6>Cart Total: <span class="price" > ${{cartTotal}} </span></h6>
         </div>
-    </div>
+        <div class="card-body">
+          <div *ngFor="let item of shoppingCart">
+            <div class="product-box">
+                <div class="col details">
+                <h6>{{ item.size }} {{ item.tile }} <span class="category"> - {{item.brand }} </span></h6>
+                <td class="price"><span class="price-label"> Price: </span> ${{ item.price }}</td>
+                <div class="space_empty"></div>                
+                </div>
+                <div class="price-right">
+                    <div class="row button_add">  
+                        <button (click)="RemoveFromCart(item)" class=" btn remove"> Remove Item </button>
+                    </div>
+                    <span class="price-label">Quantity: <span class="quantity">{{item.quantity}}</span></span>
+                </div>
+            </div>
+            <br>
+            </div>
+            <div *ngIf="shoppingCart.length != 0; else elseBlock">
+                <a href="#" class="btn checkout btn-primary">Check Out</a>
+            </div>
+            <ng-template #elseBlock> 
+                <p>No Items In Shopping Cart....</p>
+            </ng-template>
+        </div>
+        </div>
 </div>
 <div class="items">
     <div class="card items" style="width: 35rem;">
         <div class="card-header">
+            <h5>Product Catalog</h5>
             <div class="input-group rounded">
-                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                <span class="input-group-text border-0" id="search-addon">
-                  <i class="fas fa-search"></i>
-                </span>
+                <input (input)="filterProducts()" type="search" [(ngModel)]="searchTerm" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
             </div>
         </div>
         <div class="card-body">
-          <h5 class="card-title">Products</h5>
-          <div *ngFor="let product of products">
-            <div class="product-box">
-            <div class="col details">
-            <h6>{{ product.size }} {{ product.name }} <span class="category"> - {{product.brand }} </span></h6>
-            <td class="price"><span class="price-label"> Price: </span> ${{ product.price }}</td>
-            <div class="space_empty"></div>
-            <!-- <h6>{{ product.name }} <span class="category"> {{product.category }} - {{product.type}} </span></h6> -->
-            <span class="desc">Product Description: {{ product.description }}</span>
-            
+          <!-- <h5 class="card-title">Products</h5> -->
+          <div *ngFor="let c of categories">
+            <h5 *ngIf="isCategoryValid(c)">{{c.category}}</h5>
+            <div *ngIf="isCategoryValid(c)" class="separate"></div>
+            <div *ngFor="let t of c.types">
+                <br>
+                <h6 *ngIf="isCategoryValid(c) && isTypeValid(t)">{{t}}</h6>
+                <div *ngFor="let product of filteredProducts">
+                    <div *ngIf="product.category == c.category && product.type == t">
+                    <div class="product-box">
+                    <div class="col details">
+                    <h6>{{ product.name }} <span class="category"> - {{product.brand }} </span></h6>
+                    <td class="price"><span class="price-label"> Price: </span> ${{ product.price }}</td>
+                    <td class="price-label">Size: {{ product.size }}</td>
+                    <br>
+                    <div class="space_empty"></div>
+                    <!-- <h6>{{ product.name }} <span class="category"> {{product.category }} - {{product.type}} </span></h6> -->
+                    <span class="desc">Product Description: {{ product.description }}</span>
+                    
+                    </div>
+                    <div class="price-right">
+                        <div class="row button_add">  
+                            <button (click)="AddToCart(product)" class=" btn add"> Add To Cart + </button>
+                        </div>
+                    </div>
+                    </div>
+                    <br>
+                    </div>
+                </div> 
             </div>
-            <div class="price-right">
-                <div class="row button_add">  
-                    <button class=" btn add"> Add To Cart + </button>
-                </div>
-            </div>
-            </div>
-        </div>          
+        </div>         
         </div>
     </div>
 </div>

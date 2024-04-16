@@ -1,9 +1,15 @@
 <!-- staff-page.component.html -->
 <div *ngIf="products">
-    <h1>Staff Page</h1>
-    <button (click)="addProduct()">Add Product</button>
-    <table>
-      <tr>
+    <h1 style="padding:1rem">Staff Page</h1>
+
+    <body style="background-color:  rgb(225, 243, 253)  !important; padding-top: 2rem;">
+    <div class="card" style="margin-top: 2rem; margin-left: 2rem;">
+    <div class="card-header" style="display: flex;">
+      <h5>Product Inventory</h5>
+      <button class="btn" (click)="addProduct()" style="background-color: rgb(161, 255, 161); justify-self: end; margin-left: auto;">Add Product</button>
+    </div>
+    <table style="margin: 1rem;">
+      <tr style="padding-left: 10px">
         <th>ID</th>
         <th>Name</th>
         <th>Category</th>
@@ -14,6 +20,7 @@
         <th>Price</th>
         <th>Actions</th>
       </tr>
+      <tr style="border: solid 1px; width: 50rem; height: 1px; background-color: rgba(0, 0, 0, 0.36); border-color: rgba(0, 0, 0, 0.163);"></tr>
       <tr *ngFor="let product of products">
         <td>{{ product.productid }}</td>
         <td>{{ product.name }}</td>
@@ -24,11 +31,15 @@
         <td>{{ product.description }}</td>
         <td>{{ product.price }}</td>
         <td>
-          <button (click)="modifyProduct(product.productid)">Modify</button>
-          <button (click)="deleteProduct(product.productid)">Delete</button>
+          <button class="btn" (click)="modifyProduct(product.productid)">Modify</button>
+          <button class="btn" (click)="deleteProduct(product.productid)">Delete</button>
         </td>
       </tr>
+      <tr style="border: solid 1px; width: 50rem; height: 1px; background-color: rgba(0, 0, 0, 0.36); border-color: rgba(0, 0, 0, 0.163);"></tr>
+
+      
     </table>
-  </div>
-  <button (click)="logout()">Log Out</button>
-  
+    </div>
+  <button class="btn" (click)="logout()" style="margin-top:2rem;color: whitesmoke; background-color: rgb(253, 137, 137); margin-left: 30rem; font-size: medium;">Log Out</button>
+  </body>
+</div>
