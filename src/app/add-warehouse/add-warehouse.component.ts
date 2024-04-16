@@ -16,14 +16,14 @@ export class AddWarehouseComponent {
 
   constructor(private router: Router, private http: HttpClient, private authService: AuthService) {}
 
-  location: string = '';
+  address: string = '';
 
   cancel(): void {
     this.router.navigateByUrl('/staff-home');
   }
 
   save(): void {
-    this.http.post<any>('http://localhost:3000/api/warehouse', { location: this.location }).subscribe(
+    this.http.post<any>('http://localhost:3000/api/warehouse', { address: this.address }).subscribe(
         (response) => {
           console.log('Warehouse added', response);
           this.router.navigateByUrl('/staff-home');

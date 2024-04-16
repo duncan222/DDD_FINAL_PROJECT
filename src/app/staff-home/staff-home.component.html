@@ -14,6 +14,7 @@
         <th>Size</th>
         <th>Description</th>
         <th>Price</th>
+        <th>Quantity</th>
         <th>Actions</th>
       </tr>
       <tr *ngFor="let product of products">
@@ -25,6 +26,7 @@
         <td>{{ product.size }}</td>
         <td>{{ product.description }}</td>
         <td>{{ product.price }}</td>
+        <td>{{ product.quantity }}</td>
         <td>
           <button (click)="modifyProduct(product.productid)">Modify</button>
           <button (click)="deleteProduct(product.productid)">Delete</button>
@@ -38,13 +40,13 @@
     <table>
       <tr>
         <th>ID</th>
-        <th>Location</th>
+        <th>Address</th>
         <th>Stock</th>
         <th>Actions</th>
       </tr>
       <tr *ngFor="let warehouse of warehouses">
         <td>{{ warehouse.warehouseid }}</td>
-        <td>{{ warehouse.location }}</td>
+        <td>{{ warehouse.address }}</td>
         <td>{{ warehousestock }}</td>
         <td>
           <button (click)="modifyStock(warehouse.warehouseid)">Modify Stock</button>

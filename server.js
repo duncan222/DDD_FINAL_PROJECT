@@ -15,7 +15,7 @@ const { Pool } = require("pg");
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "project",
+  database: "dddproject",
   password: "dddpostgres",
   port: 5432,
 });
@@ -26,17 +26,6 @@ pool.connect((err) => {
   } else {
     console.log("Connected to PostgresSQL");
   }
-});
-
-app.get("/api/items", (req, res) => {
-  pool.query("SELECT * FROM items", (err, result) => {
-    if (err) {
-      console.error("Error executing query:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      res.json(result.rows);
-    }
-  });
 });
 
 //get by staff name
@@ -93,11 +82,11 @@ app.get("/api/customer", (req, res) => {
 });
 
 app.post("/api/warehouse", (req, res) => {
-  const { location } = req.body;
+  const { address } = req.body;
 
   pool.query(
-    "INSERT INTO warehouse (location) VALUES ($1) RETURNING *",
-    [location],
+    "INSERT INTO warehouse (address) VALUES ($1) RETURNING *",
+    [address],
     (err, result) => {
       if (err) {
         console.error("Error executing query:", err);
@@ -110,28 +99,11 @@ app.post("/api/warehouse", (req, res) => {
 });
 
 app.post("/api/product", (req, res) => {
-  const { name, category, type, brand, size, description, price } = req.body;
+  const { name, category, type, brand, size, description, price, quantity } = req.body;
 
   pool.query(
-    "INSERT INTO product (name, category, type, brand, size, description, price) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-    [name, category, type, brand, size, description, price],
-    (err, result) => {
-      if (err) {
-        console.error("Error executing query:", err);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        res.json(result.rows[0]);
-      }
-    }
-  );
-});
-
-app.post("/api/items", (req, res) => {
-  const { name, description } = req.body;
-
-  pool.query(
-    "INSERT INTO items (name, description) VALUES ($1, $2) RETURNING *",
-    [name, description],
+    "INSERT INTO product (name, category, type, brand, size, description, price, quantity) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+    [name, category, type, brand, size, description, price, quantity],
     (err, result) => {
       if (err) {
         console.error("Error executing query:", err);
@@ -144,11 +116,11 @@ app.post("/api/items", (req, res) => {
 });
 
 app.post("/api/customer", (req, res) => {
-  const { name, balance, paymentaddress, deliveryaddress } = req.body;
+  const { name, balance, customeraddressid } = req.body;
 
   pool.query(
-    "INSERT INTO customer (name, balance, paymentaddress, deliveryaddress) VALUES ($1, $2, $3, $4) RETURNING *",
-    [name, balance, paymentaddress, deliveryaddress],
+    "INSERT INTO customer (name, balance, customeraddressid) VALUES ($1, $2, $3) RETURNING *",
+    [name, balance, customeraddressid],
     (err, result) => {
       if (err) {
         console.error("Error executing query:", err);
@@ -160,6 +132,24 @@ app.post("/api/customer", (req, res) => {
     }
   );
 });
+
+app.post("/api/addresses", (req, res) => {
+  const {paymentaddress, deliveryaddress} = req.body;
+
+  pool.query(
+    "INSERT INTO addresses (paymentaddress, deliveryaddress) VALUES ($1, $2) RETURNING *",
+    [paymentaddress, deliveryaddress],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        const addressId = result.rows[0].uniqueaddressid;
+        res.json({ uniqueaddressid: addressId });
+      }
+    }
+  )
+})
 
 app.post("/api/staff", (req, res) => {
   const { name, address, salary, jobtitle } = req.body;
@@ -179,33 +169,13 @@ app.post("/api/staff", (req, res) => {
   );
 });
 
-app.put("/api/items/:id", (req, res) => {
-  const { id } = req.params;
-  const { name, description } = req.body;
-
-  pool.query(
-    "UPDATE items SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-    [name, description, id],
-    (err, result) => {
-      if (err) {
-        console.error("Error executing query:", err);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else if (result.rows.length === 0) {
-        res.status(404).json({ error: "Item not found" });
-      } else {
-        res.json(result.rows[0]);
-      }
-    }
-  );
-});
-
 app.put("/api/product/:id", (req, res) => {
   const { id } = req.params;
-  const { name, category, type, brand, size, description, price } = req.body;
+  const { name, category, type, brand, size, description, price, quantity } = req.body;
 
   pool.query(
-    "UPDATE product SET name = $1, category = $2, type = $3, brand = $4, size = $5, description = $6, price = $7 WHERE productid = $8",
-    [name, category, type, brand, size, description, price, id],
+    "UPDATE product SET name = $1, category = $2, type = $3, brand = $4, size = $5, description = $6, price = $7, quantity = $8 WHERE productid = $9",
+    [name, category, type, brand, size, description, price, quantity, id],
     (err, result) => {
       if (err) {
         console.error("Error executing query:", err);
@@ -234,26 +204,6 @@ app.put("/api/staff/id/:id", (req, res) => {
         res.status(404).json({ error: "Item not found" });
       } else {
         res.json({ message: "Staff updated successfully" });
-      }
-    }
-  );
-});
-
-
-app.delete("/api/items/:id", (req, res) => {
-  const { id } = req.params;
-
-  pool.query(
-    "DELETE FROM items WHERE id = $1 RETURNING *",
-    [id],
-    (err, result) => {
-      if (err) {
-        console.error("Error executing query:", err);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else if (result.rows.length === 0) {
-        res.status(404).json({ error: "Item not found" });
-      } else {
-        res.json(result.rows[0]);
       }
     }
   );

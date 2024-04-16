@@ -24,7 +24,8 @@ export class ModifyProductComponent {
     brand: '',
     size: '',
     description: '',
-    price: 0
+    price: 0,
+    quantity: 0
   };
 
   ngOnInit(): void {
@@ -50,7 +51,7 @@ export class ModifyProductComponent {
 
   save(): void {
     this.http.put<any>(`http://localhost:3000/api/product/${this.productId}`, { name: this.product.name, category: this.product.category, type: this.product.type, 
-      brand: this.product.brand, size: this.product.size, description: this.product.description, price: this.product.price }).subscribe(
+      brand: this.product.brand, size: this.product.size, description: this.product.description, price: this.product.price, quantity: this.product.quantity}).subscribe(
         (response) => {
           console.log('Product updated', response);
           this.router.navigateByUrl('/staff-home');
