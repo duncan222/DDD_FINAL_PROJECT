@@ -46,10 +46,15 @@ export class StaffHomeComponent {
         for (const warehouse of warehouses) {
           this.http.get<any>(`http://localhost:3000/api/totalstock/id/${warehouse.warehouseid}`).subscribe(
             (response) => {
+              console.log(response.totalstock);
               warehouse.totalstock = response.totalstock;
             },
             (error) => {
-              console.error('Error', error);
+              if (error.status === 404) {
+                warehouse.totalstock = 0;
+              } else {
+                console.error('Error', error);
+              }
             }
           );
         }
