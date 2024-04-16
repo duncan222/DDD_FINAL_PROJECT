@@ -6,36 +6,26 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-add-product',
+  selector: 'app-add-warehouse',
   standalone: true,
   imports: [HttpClientModule, FormsModule, CommonModule],
-  templateUrl: './add-product.component.html',
-  styleUrl: './add-product.component.css'
+  templateUrl: './add-warehouse.component.html',
+  styleUrl: './add-warehouse.component.css'
 })
-export class AddProductComponent {
+export class AddWarehouseComponent {
 
   constructor(private router: Router, private http: HttpClient, private authService: AuthService) {}
 
-  product: any = {
-    name: '',
-    category: '',
-    type: '',
-    brand: '',
-    size: '',
-    description: '',
-    price: 0,
-    quantity: 0
-  };
+  address: string = '';
 
   cancel(): void {
     this.router.navigateByUrl('/staff-home');
   }
 
   save(): void {
-    this.http.post<any>('http://localhost:3000/api/product', { name: this.product.name, category: this.product.category, type: this.product.type, 
-      brand: this.product.brand, size: this.product.size, description: this.product.description, price: this.product.price, quantity: this.product.quantity }).subscribe(
+    this.http.post<any>('http://localhost:3000/api/warehouse', { address: this.address }).subscribe(
         (response) => {
-          console.log('Product added', response);
+          console.log('Warehouse added', response);
           this.router.navigateByUrl('/staff-home');
         },
         (error) => {

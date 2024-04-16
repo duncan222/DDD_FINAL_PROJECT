@@ -1,6 +1,7 @@
 <!-- staff-page.component.html -->
 <div *ngIf="products">
-    <h1 style="padding:1rem">Staff Page</h1>
+    <h1>Staff Page</h1>
+    <button class="btn" (click)="editStaffAccount()">Edit Account Details</button>
 
     <body style="background-color:  rgb(225, 243, 253)  !important; padding-top: 2rem;">
     <div class="card" style="margin-top: 2rem; margin-left: 2rem;">
@@ -18,6 +19,7 @@
         <th>Size</th>
         <th>Description</th>
         <th>Price</th>
+        <th>Quantity</th>
         <th>Actions</th>
       </tr>
       <tr style="border: solid 1px; width: 50rem; height: 1px; background-color: rgba(0, 0, 0, 0.36); border-color: rgba(0, 0, 0, 0.163);"></tr>
@@ -30,9 +32,66 @@
         <td>{{ product.size }}</td>
         <td>{{ product.description }}</td>
         <td>{{ product.price }}</td>
+        <td>{{ product.quantity }}</td>
         <td>
           <button class="btn" (click)="modifyProduct(product.productid)">Modify</button>
-          <button class="btn" (click)="deleteProduct(product.productid)">Delete</button>
+          <button class="btn" (click)="deleteFromProductStock(product.productid)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="warehouses">
+    <h3>Warehouses</h3>
+    <button (click)="addWarehouse()">Add Warehouse</button>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Address</th>
+        <th>Total Stock</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let warehouse of warehouses">
+        <td>{{ warehouse.warehouseid }}</td>
+        <td>{{ warehouse.address }}</td>
+        <td>{{ warehouse.totalstock }}</td>
+        <td>
+          <button (click)="addStock(warehouse.warehouseid)">Add Stock</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="customers">
+    <h3>Customers</h3>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let customer of customers">
+        <td>{{ customer.customerid }}</td>
+        <td>{{ customer.name }}</td>
+        <td>
+          <button (click)="seeCustomerDetails(customer.customerid)">View All Details</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="orders">
+    <h3>Order Processing</h3>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Product</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let order of orders">
+        <td>{{ order.orderid }}</td>
+        <td>{{ order.orderedproduct }}</td>
+        <td>{{ order.status }}</td>
+        <td>
+          <button (click)="processOrder(order.orderid)">Change Order Status</button>
         </td>
       </tr>
       <tr style="border: solid 1px; width: 50rem; height: 1px; background-color: rgba(0, 0, 0, 0.36); border-color: rgba(0, 0, 0, 0.163);"></tr>

@@ -1,0 +1,11 @@
+<!-- view-customer.component.html -->
+
+<div *ngIf="customer">
+    <h2>Customer Details</h2>
+    <p>Name: {{ customer.name }}</p>
+    <p>Balance: {{ customer.balance }}</p>
+    <p>Payment Address: {{ addresses.paymentaddress }}</p>
+    <p>Delivery Address: {{ addresses.deliveryaddress }}</p>
+    <button (click)="goBack()">Go Back</button>
+  </div>
+  
