@@ -4,7 +4,7 @@
 <!-- needs to be search, list, and shopping cart selection. -->
 
 <div class="row spacing">
-<div class="col-1 cart">
+<div class="cart">
     <div class="card" style="width: 18rem;">
         <div class="card-header"></div>
         <div class="card-body">
@@ -15,8 +15,8 @@
         </div>
     </div>
 </div>
-<div class="col-2 items">
-    <div class="card" style="width: 18rem;">
+<div class="items">
+    <div class="card items" style="width: 35rem;">
         <div class="card-header">
             <div class="input-group rounded">
                 <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
@@ -27,8 +27,23 @@
         </div>
         <div class="card-body">
           <h5 class="card-title">Products</h5>
-          <div *ngFor="item of items"></div>
-          <p class="card-text">All the products listed here.</p>
+          <div *ngFor="let product of products">
+            <div class="product-box">
+            <div class="col details">
+            <h6>{{ product.size }} {{ product.name }} <span class="category"> - {{product.brand }} </span></h6>
+            <td class="price"><span class="price-label"> Price: </span> ${{ product.price }}</td>
+            <div class="space_empty"></div>
+            <!-- <h6>{{ product.name }} <span class="category"> {{product.category }} - {{product.type}} </span></h6> -->
+            <span class="desc">Product Description: {{ product.description }}</span>
+            
+            </div>
+            <div class="price-right">
+                <div class="row button_add">  
+                    <button class=" btn add"> Add To Cart + </button>
+                </div>
+            </div>
+            </div>
+        </div>          
         </div>
     </div>
 </div>
