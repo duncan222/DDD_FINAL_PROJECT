@@ -15,8 +15,8 @@ const { Pool } = require("pg");
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "dddproject",
-  password: "dddpostgres",
+  database: "DB_FINAL_DB2",
+  password: "duncan123",
   port: 5432,
 });
 
@@ -32,24 +32,31 @@ pool.connect((err) => {
 app.get("/api/staff/:name", (req, res) => {
   const { name } = req.params;
 
-  pool.query(
-    "SELECT * FROM staff WHERE name = $1",
-    [name],
-    (err, result) => {
-      if (err) {
-        console.error("Error executing query:", err);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else if (result.rows.length === 0) {
-        res.status(404).json({ error: "Item not found" });
-      } else {
-        res.json(result.rows[0]);
-      }
+  pool.query("SELECT * FROM staff WHERE name = $1", [name], (err, result) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else if (result.rows.length === 0) {
+      res.status(404).json({ error: "Item not found" });
+    } else {
+      res.json(result.rows[0]);
     }
-  );
+  });
 });
 
 app.get("/api/product", (req, res) => {
   pool.query("SELECT * FROM product", (err, result) => {
+    if (err) {
+      console.error("Error fetching products", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.json(result.rows);
+    }
+  });
+});
+
+app.get("/api/order_products", (req, res) => {
+  pool.query("SELECT * FROM order_products", (err, result) => {
     if (err) {
       console.error("Error fetching products", err);
       res.status(500).json({ error: "Internal Server Error" });
@@ -110,7 +117,8 @@ app.post("/api/warehouse", (req, res) => {
 });
 
 app.post("/api/product", (req, res) => {
-  const { name, category, type, brand, size, description, price, quantity } = req.body;
+  const { name, category, type, brand, size, description, price, quantity } =
+    req.body;
 
   pool.query(
     "INSERT INTO product (name, category, type, brand, size, description, price, quantity) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
@@ -145,7 +153,7 @@ app.post("/api/customer", (req, res) => {
 });
 
 app.post("/api/addresses", (req, res) => {
-  const {paymentaddress, deliveryaddress} = req.body;
+  const { paymentaddress, deliveryaddress } = req.body;
 
   pool.query(
     "INSERT INTO addresses (paymentaddress, deliveryaddress) VALUES ($1, $2) RETURNING *",
@@ -159,8 +167,8 @@ app.post("/api/addresses", (req, res) => {
         res.json({ uniqueaddressid: addressId });
       }
     }
-  )
-})
+  );
+});
 
 app.post("/api/staff", (req, res) => {
   const { name, address, salary, jobtitle } = req.body;
@@ -175,6 +183,87 @@ app.post("/api/staff", (req, res) => {
       } else {
         const staffId = result.rows[0].staffid;
         res.json({ staffid: staffId });
+      }
+    }
+  );
+});
+
+app.post("/api/order_products", (req, res) => {
+  const { Quantity, OrderId, ProductId } = req.body;
+
+  pool.query(
+    "INSERT INTO order_products (Quantity, OrderId, ProductId) VALUES ($1, $2, $3) RETURNING *",
+    [Quantity, OrderId, ProductId],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+app.post("/api/creditcard", (req, res) => {
+  const { CardNumber, CustomerID, CardAddresses } = req.body;
+  pool.query(
+    "INSERT INTO CreditCard (CardNumber, CustomerID, CardAddresses) VALUES ($1, $2, $3) RETURNING *",
+    [CardNumber, CustomerID, CardAddresses],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+app.post("/api/orders", (req, res) => {
+  const {
+    Status,
+    DeliveryType,
+    DeliveryPrice,
+    DeliveryDate,
+    ShipDate,
+    CustomerID,
+    CardNumber,
+  } = req.body;
+  pool.query(
+    "INSERT INTO orders (Status, DeliveryType, DeliveryPrice, DeliveryDate, ShipDate, CustomerID, CardNumber) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+    [
+      Status,
+      DeliveryType,
+      DeliveryPrice,
+      DeliveryDate,
+      ShipDate,
+      CustomerID,
+      CardNumber,
+    ],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+app.post("/api/order_products", (req, res) => {
+  const { Quantity, OrderId, ProductId } = req.body;
+  pool.query(
+    "INSERT INTO order_products (Quantity, OrderId, ProductId) VALUES ($1, $2, $3) RETURNING *",
+    [Quantity, OrderId, ProductId],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.json(result.rows[0]);
       }
     }
   );
@@ -198,9 +287,48 @@ app.post("/api/productstock", (req, res) => {
   );
 });
 
+app.put("/api/addresses/:addressID", (req, res) => {
+  const { addressID } = req.params;
+  const { paymentaddress, deliveryaddress } = req.body;
+  pool.query(
+    "UPDATE Addresses SET PaymentAddress = $1, DeliveryAddress = $2 WHERE UniqueAddressID = $3",
+    [paymentaddress, deliveryaddress, addressID],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rowCount === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json({ message: "Card updated successfully" });
+      }
+    }
+  );
+});
+
+app.put("/api/creditcard/:old_card_number", (req, res) => {
+  const { old_card_number } = req.params;
+  const { CardNumber, CardAddresses } = req.body;
+  pool.query(
+    "UPDATE CreditCard SET CardNumber = $1, CardAddresses = $2 WHERE CardNumber = $3",
+    [CardNumber, CardAddresses, old_card_number],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rowCount === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json({ message: "Card updated successfully" });
+      }
+    }
+  );
+});
+
 app.put("/api/product/:id", (req, res) => {
   const { id } = req.params;
-  const { name, category, type, brand, size, description, price, quantity } = req.body;
+  const { name, category, type, brand, size, description, price, quantity } =
+    req.body;
 
   pool.query(
     "UPDATE product SET name = $1, category = $2, type = $3, brand = $4, size = $5, description = $6, price = $7, quantity = $8 WHERE productid = $9",
@@ -238,6 +366,25 @@ app.put("/api/staff/id/:id", (req, res) => {
   );
 });
 
+app.put("/api/customer/id/:id", (req, res) => {
+  const { id } = req.params;
+  const { balance } = req.body;
+  pool.query(
+    "UPDATE customer SET Balance = $1 WHERE customerID = $2",
+    [balance, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rowCount === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json({ message: "Customer updated successfully" });
+      }
+    }
+  );
+});
+
 app.delete("/api/product/:id", (req, res) => {
   const { id } = req.params;
 
@@ -257,11 +404,65 @@ app.delete("/api/product/:id", (req, res) => {
   );
 });
 
+app.delete("/api/addresses/:id", (req, res) => {
+  const { id } = req.params;
+  pool.query(
+    "DELETE FROM Addresses WHERE UniqueAddressID = $1 RETURNING *",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+app.delete("/api/creditcard/:id", (req, res) => {
+  const { id } = req.params;
+  pool.query(
+    "DELETE FROM CreditCard WHERE CardNumber = $1 RETURNING *",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
 app.delete("/api/productstock/:id", (req, res) => {
   const { id } = req.params;
 
   pool.query(
     "DELETE FROM productstock WHERE productid = $1 RETURNING *",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+app.get("/api/creditcard/:id", (req, res) => {
+  const { id } = req.params;
+  pool.query(
+    "SELECT * FROM CreditCard WHERE CustomerID = $1",
     [id],
     (err, result) => {
       if (err) {
@@ -318,20 +519,16 @@ app.get("/api/productstock/:id", (req, res) => {
 app.get("/api/staff/id/:id", (req, res) => {
   const { id } = req.params;
 
-  pool.query(
-    "SELECT * FROM staff WHERE staffid = $1",
-    [id],
-    (err, result) => {
-      if (err) {
-        console.error("Error executing query:", err);
-        res.status(500).json({ error: "Internal Server Error" });
-      } else if (result.rows.length === 0) {
-        res.status(404).json({ error: "Item not found" });
-      } else {
-        res.json(result.rows[0]);
-      }
+  pool.query("SELECT * FROM staff WHERE staffid = $1", [id], (err, result) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else if (result.rows.length === 0) {
+      res.status(404).json({ error: "Item not found" });
+    } else {
+      res.json(result.rows[0]);
     }
-  );
+  });
 });
 
 //get by customer id
@@ -393,7 +590,3 @@ app.get("/api/totalstock/id/:id", (req, res) => {
     }
   );
 });
-
-
-
-

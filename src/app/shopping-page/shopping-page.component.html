@@ -1,6 +1,6 @@
 
 <br>
-<h1 class="page-title">Online Store Application</h1>
+<h1 class="page-title" style="display: flex;">Online Store Application   <h1 style="margin-left: 35rem; display: flex;">Balance: <p style="margin-left: 1rem;" class="price">${{this.customerBalance}}</p> </h1></h1>
 <br>
 
 <!-- needs to be search, list, and shopping cart selection. -->
@@ -30,7 +30,37 @@
             <br>
             </div>
             <div *ngIf="shoppingCart.length != 0; else elseBlock">
-                <a href="#" class="btn checkout btn-primary">Check Out</a>
+                <h2 style="font-size: medium;">Choose your shipment plan:</h2>
+                <div style="display: flex;">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="color" id="colorRed" value="standard" [(ngModel)]="deliveryType">
+                  <label class="form-check-label" for="colorRed">
+                    Standard
+                  </label>
+                </div>
+                <div style="margin-left: 1rem;" class="form-check">
+                  <input class="form-check-input" type="radio" name="color" id="colorBlue" value="express" [(ngModel)]="deliveryType">
+                  <label class="form-check-label" for="colorBlue">
+                    Express
+                  </label>
+                </div>
+                </div>
+                <br>
+                <h2 style="font-size: medium;">Choose Credit Card:</h2>
+                <div>
+                    <div class="form-check" *ngFor="let card of cards_and_address">
+                        <div class="product-box"> 
+                            <p class="OrderID"> {{card.cardNumber}} </p>
+                            <p class="OrderID"> {{card.cardAddress}}</p>
+                            <input class="form-check-input" type="radio" name="card" id="card" value='{{card.cardNumber}}' [(ngModel)]="cardSelection">
+                        </div>
+                    </div>
+                </div>
+
+                <a *ngIf="cards.length != 0" (click)="orderButton()" class="btn checkout btn-primary" style="margin-top: 2rem; font-size: medium; margin-left: 8rem;">Check Out</a>
+            <div>                 
+            </div>
+            
             </div>
             <ng-template #elseBlock> 
                 <p>No Items In Shopping Cart....</p>
@@ -38,6 +68,44 @@
         </div>
         </div>
 </div>
+
+<div class="orders">
+    <div class="card" style="width:25rem;">
+        <div class="card-header">          
+            <h5 class="card-title">Orders</h5>
+        </div>
+        <div class="card-body">
+        <div *ngIf="orders_list.length != 0; else elseBlock3" >
+          <div *ngFor="let order of orders_list">
+            <div class="product-box">
+                <div class="col details">
+                <h6 class="orderID">Order ID: {{ order.orderID }} <span class="orderID" style="margin-left: 4rem;"> Status: {{order.status }}</span></h6>
+                <span class="order-label"> Delivery Type: {{ order.deliveryType }} </span> 
+                <span class="order-label" style="display: flex;"> Order Total:   <p class="price" style="margin-left: .5rem;">  ${{ order.deliveryPrice }}</p></span> 
+                <span *ngIf="order.deliveryDate != null" style="margin-top: -2rem;" class="order-label"> Delivery Date: ${{ order.deliveryDate }} </span> 
+                <span *ngIf="order.deliveryDate == null" class="order-label"> Delivery Date: still pending... </span> 
+                <br>
+                <span *ngIf="order.shipDate != null" class="order-label"> Ship Date: ${{ order.shipDate }} </span> 
+                <span *ngIf="order.shipDate == null" class="order-label"> Ship Date: not yet shipped... </span> 
+                <br>
+                <br>
+                <span class="orderID" style="font-size: medium;"> Products Ordered:</span>
+                <div *ngFor="let product of order.orderItems" style="margin-left: 1rem;"> 
+                    <span class="order-label"> {{ product.title }} x {{ product.quantity }}</span> 
+                </div>
+                <div class="space_empty"></div>                
+                </div>
+            </div>
+            <br>
+            </div>
+        </div>
+            <ng-template #elseBlock3> 
+                <p>No current orders....</p>
+            </ng-template>
+        </div>
+        </div>
+</div>
+
 <div class="items">
     <div class="card items" style="width: 35rem;">
         <div class="card-header">
@@ -81,4 +149,58 @@
         </div>
     </div>
 </div>
+
+<div class="credit">
+    <div class="card" style="width:20rem;">
+        <div class="card-header">          
+            <h5 class="card-title">Payment</h5>
+        </div>
+        <div class="card-body">
+        <div *ngIf="cards_and_address.length != 0; else elseBlock2" >
+          <div *ngFor="let card of cards_and_address">
+            <div class="product-box">
+                <div class="OrderID">
+                    {{card.cardNumber}}
+                </div>
+                <button class="btn" style="width: auto; color: rgb(198, 118, 198); font-size: smaller;">Edit</button>
+                <button class="btn" style="width: auto; color: rgb(204, 29, 102); font-size: smaller;">Delete</button>
+            </div>
+            <br>
+            </div>
+        </div>
+            <ng-template #elseBlock2> 
+                <p>No cards.....</p>
+            </ng-template>
+        </div>
+        <br> 
+        <p class="orderID" style="margin-left: 5rem;">Add Credit Card</p>
+        <form (ngSubmit)="submitForm()">
+            <div style="margin-left: 2rem;" class="mb-3">
+              <label  style="font-size: small;" for="cardnumber" class="form-label">Card Number: </label>
+              <input
+                type="input"
+                id="cardnumber"
+                class="form-control"
+                [(ngModel)]="cardForm.cardnumber"
+                name="cardnumber"
+                required
+              />
+            </div>
+            <div style="margin-left: 2rem;" class="mb-3">
+              <label for="cardaddress" style="font-size: small;" class="form-label">Card Address</label>
+              <input
+                type="input"
+                id="cardaddress"
+                class="form-control"
+                [(ngModel)]="cardForm.cardAddress"
+                name="cardaddress"
+                required
+              />
+            </div>
+            <button type="submit" class=" btn addcard"> Add Credit Card</button>
+          </form>
+        </div>
+</div>
+
+
 </div>

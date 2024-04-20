@@ -29,6 +29,17 @@ h1, h2, h3, h4, h5{
 
 }
 
+.order-label{
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.71);
+    font-size: smaller;
+}
+.orderID{ 
+    font-size: large;
+    font-style: normal !important;
+    font-weight: bold;
+    color: rgb(80, 91, 97); 
+}
 
 
 h6 .category{ 
@@ -54,6 +65,7 @@ h6 .category{
 .page-title{ 
     margin-left: 3rem;
 }
+
 .separate{ 
     width: auto;
     height: 1px; 
@@ -62,12 +74,24 @@ h6 .category{
 
 }
 
+.addcard{
+    background-color: rgb(174, 238, 174);
+    width: auto; 
+    margin-left: 6.5rem;
+    margin-bottom: 1rem;
+}
+
+.credit{
+    margin-left: 91rem;
+    position: absolute;
+    margin-top: 2rem;
+}
+
 .checkout{ 
     width: auto; 
     height: 2.5rem;
     text-align: center;
     align-items: center;
-    margin-left: auto;  
     position: relative;
     margin-left: 13rem;  
 }
@@ -121,7 +145,13 @@ h6 .category{
 }
 
 .cart{ 
-    margin-left: 40rem;
+    margin-left: 37rem;
+    position: absolute;
+    margin-top: 2rem;
+}
+
+.orders{ 
+    margin-left: 64rem;
     position: absolute;
     margin-top: 2rem;
 }
