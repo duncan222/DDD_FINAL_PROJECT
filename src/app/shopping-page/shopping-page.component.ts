@@ -86,6 +86,7 @@ export class ShoppingPageComponent implements OnInit{
   cards: any [] = []; 
   cards_and_address: any[] = [];
   cardSelection: string = "";
+  editCard: boolean = false;
 
 
 
@@ -100,7 +101,7 @@ export class ShoppingPageComponent implements OnInit{
     DeliveryPrice:this.cartTotal,
     DeliveryDate: new Date().toDateString,
     ShipDate: new Date().toDateString,
-    CardNumber: this.selectedCard, 
+    CardNumber: this.cardSelection, 
     CustomerID: this.customerID}).subscribe(
       (response) => {
         console.log('Customer registration successfull', response);
@@ -190,6 +191,7 @@ export class ShoppingPageComponent implements OnInit{
     CardAddresses: addressid,
   }).subscribe(
       (response) => {
+        console.log(response)
         this.cards = [];
         this.getCards();
         console.log('Customer registration successfull', response);
@@ -202,7 +204,7 @@ export class ShoppingPageComponent implements OnInit{
 
   setupCards(): void{ 
     console.log(this.cards.length)
-
+    console.log(this.cards)
     for(let i = 0; i < this.cards.length; i++){
       console.log(this.cards)
       this.http.get<any>(`http://localhost:3000/api/addresses/id/${this.cards[i].cardaddresses}`).subscribe(
@@ -210,9 +212,10 @@ export class ShoppingPageComponent implements OnInit{
           console.log(response)
           var temp_card: Credit = { 
             cardNumber: this.cards[i].cardnumber,
-            cardAddress: response.paymentAddress, 
-            cardAddressID: this.cards[i].cardaddresses
+            cardAddress: response.paymentaddress, 
+            cardAddressID: response.uniqueaddressid
           }
+          console.log(temp_card)
           this.cards_and_address.push(temp_card);        
         },
         (error) => { 
@@ -240,10 +243,11 @@ export class ShoppingPageComponent implements OnInit{
 
   }
 
-  deleteAddress(paymentaddress: number): void{ 
-    this.http.delete<any>(`http://localhost:3000/api/creditcard/${paymentaddress}`).subscribe(
+  deleteAddress(paymentaddressID: number): void{ 
+    this.http.delete<any>(`http://localhost:3000/api/addresses/${paymentaddressID}`).subscribe(
       (response) => {
         console.log(response)
+        this.getCards(); 
       },
       (error) => {
         console.error('Error fetching staff info', error);
@@ -252,13 +256,13 @@ export class ShoppingPageComponent implements OnInit{
   }
 
 
-  deleteCard(cardnumber: string, paymentaddress: number): void{ 
+  deleteCard(cardnumber: string, paymentaddressID: number): void{ 
     this.http.delete<any>(`http://localhost:3000/api/creditcard/${cardnumber}`).subscribe(
       (response) => {
         console.log(response)
         this.cards = []; 
-        this.deleteAddress(paymentaddress); 
-        this.getCards; 
+        this.cards_and_address = []
+        this.deleteAddress(paymentaddressID); 
       },
       (error) => {
         console.error('Error fetching staff info', error);

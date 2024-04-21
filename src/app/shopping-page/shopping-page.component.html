@@ -47,15 +47,27 @@
                 </div>
                 <br>
                 <h2 style="font-size: medium;">Choose Credit Card:</h2>
-                <div>
-                    <div class="form-check" *ngFor="let card of cards_and_address">
-                        <div class="product-box"> 
-                            <p class="OrderID"> {{card.cardNumber}} </p>
-                            <p class="OrderID"> {{card.cardAddress}}</p>
-                            <input class="form-check-input" type="radio" name="card" id="card" value='{{card.cardNumber}}' [(ngModel)]="cardSelection">
+                <div *ngIf="cards_and_address.length != 0; else elseBlock4">
+                    <div *ngFor="let card of cards_and_address">
+                        <div class="product-box" style=" text-align: center; height: 5rem;">
+                            <div class="orderID" style="font-size: small; display: flex; position: absolute; margin-left: 1rem;">
+                                Card Number: <p class="price-label" style="font-size: small; margin-left: .5rem;"> {{card.cardNumber}} </p>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="orderID" style="font-size: small; margin-top: 2rem;display: flex; text-align: center; margin-left: 1rem; position: absolute;">
+                                Payment Address: <p class="price-label" style="font-size: small; margin-left: .5rem;"> {{card.cardAddress}} </p>
+                            </div>
+                            <br>
+                            <br>
+                            <div style="position: absolute; margin-left: 20rem; margin-top: 1rem; display: flex; align-items: center; align-content: center;">
+                                <input class="form-check-input" type="radio" name="card" id="card" value='{{card.cardNumber}}' [(ngModel)]="cardSelection">
+                            </div>
                         </div>
-                    </div>
+                        <br>
+                        </div>
                 </div>
+                <ng-template #elseBlock4> Add a card to complete order... </ng-template>
 
                 <a *ngIf="cards.length != 0" (click)="orderButton()" class="btn checkout btn-primary" style="margin-top: 2rem; font-size: medium; margin-left: 8rem;">Check Out</a>
             <div>                 
@@ -158,12 +170,21 @@
         <div class="card-body">
         <div *ngIf="cards_and_address.length != 0; else elseBlock2" >
           <div *ngFor="let card of cards_and_address">
-            <div class="product-box">
-                <div class="OrderID">
-                    {{card.cardNumber}}
+            <div class="product-box" style=" text-align: center; height: 9rem;">
+                <div class="orderID" style="font-size: small; display: flex; position: absolute; margin-left: 1rem;">
+                    Card Number: <p class="price-label" style="font-size: small; margin-left: .5rem;"> {{card.cardNumber}} </p>
                 </div>
-                <button class="btn" style="width: auto; color: rgb(198, 118, 198); font-size: smaller;">Edit</button>
-                <button class="btn" style="width: auto; color: rgb(204, 29, 102); font-size: smaller;">Delete</button>
+                <br>
+                <br>
+                <div class="orderID" style="font-size: small; margin-top: 2rem;display: flex; text-align: center; margin-left: 1rem; position: absolute;">
+                    Payment Address: <p class="price-label" style="font-size: small; margin-left: .5rem;"> {{card.cardAddress}} </p>
+                </div>
+                <br>
+                <br>
+                <div style="position: absolute; margin-left: 5rem; margin-top: 5rem; display: flex; align-items: center; align-content: center;">
+                <button class="btn" style="width: auto; background-color: rgb(243, 164, 243); font-size: smaller; color: whitesmoke">Edit</button>
+                <button class="btn" (click)="deleteCard(card.cardNumber, card.cardAddressID)" style="margin-left: 1rem; width: auto; background-color: rgb(255, 119, 119); font-size: smaller; color: whitesmoke">Delete</button>
+                </div>
             </div>
             <br>
             </div>

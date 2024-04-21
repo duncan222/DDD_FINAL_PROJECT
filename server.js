@@ -471,7 +471,7 @@ app.get("/api/creditcard/:id", (req, res) => {
       } else if (result.rows.length === 0) {
         res.status(404).json({ error: "Item not found" });
       } else {
-        res.json(result.rows[0]);
+        res.json(result.rows);
       }
     }
   );
