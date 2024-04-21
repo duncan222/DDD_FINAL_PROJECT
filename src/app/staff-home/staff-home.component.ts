@@ -46,7 +46,6 @@ export class StaffHomeComponent {
         for (const warehouse of warehouses) {
           this.http.get<any>(`http://localhost:3000/api/totalstock/id/${warehouse.warehouseid}`).subscribe(
             (response) => {
-              console.log(response.totalstock);
               warehouse.totalstock = response.totalstock;
             },
             (error) => {
@@ -78,8 +77,19 @@ export class StaffHomeComponent {
 
   getOrders(): void {
     this.http.get<any[]>('http://localhost:3000/api/orders').subscribe(
-      (response) => {
-        this.orders = response;
+      (orders) => {
+        this.orders = orders;
+        for (const order of orders) {
+          this.http.get<any>(`http://localhost:3000/api/order_products/id/${order.orderid}`).subscribe(
+            (response) => {
+              order.productid = response.productid;
+              order.quantity = response.quantity;
+            },
+            (error) => {
+              console.error("Error:", error);
+            }
+          );
+        }
       },
       (error) => {
         console.error('Error', error);
@@ -133,7 +143,7 @@ export class StaffHomeComponent {
   }
 
   processOrder(orderid: number): void {
-
+    this.router.navigate(['/process-order', orderid]);
   }
 
   logout(): void {

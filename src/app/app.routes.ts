@@ -13,6 +13,7 @@ import { EditStaffComponent } from './edit-staff/edit-staff.component';
 import { AddWarehouseComponent } from './add-warehouse/add-warehouse.component';
 import { ViewCustomerComponent } from './view-customer/view-customer.component';
 import { AddStockComponent } from './add-stock/add-stock.component';
+import { ProcessOrderComponent } from './process-order/process-order.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/choose-role', pathMatch: 'full' },
@@ -28,7 +29,8 @@ export const routes: Routes = [
     { path: 'edit-staff', component: EditStaffComponent},
     { path: 'add-warehouse', component: AddWarehouseComponent},
     { path: 'view-customer/:customerid', component: ViewCustomerComponent},
-    { path: 'add-stock/:warehouseid', component: AddStockComponent}
+    { path: 'add-stock/:warehouseid', component: AddStockComponent},
+    { path: 'process-order/:orderid', component: ProcessOrderComponent}
 ];
 
 @NgModule({
