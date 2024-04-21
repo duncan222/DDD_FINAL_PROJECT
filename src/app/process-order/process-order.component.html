@@ -1,0 +1,14 @@
+<h2>Process Order #{{ orderid }}</h2>
+
+<div>
+  <label for="status">Status:</label>
+  <select id="status" [(ngModel)]="order.status">
+    <option value="issued" [selected]="order.status === 'issued'">Issued</option>
+    <option value="sent" [selected]="order.status === 'sent'">Sent</option>
+    <option value="received" [selected]="order.status === 'received'">Received</option>
+  </select>
+</div>
+
+<button (click)="cancel()">Cancel</button>
+<button (click)="save()">Save</button>
+

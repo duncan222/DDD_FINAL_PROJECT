@@ -15,8 +15,8 @@ const { Pool } = require("pg");
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "DB_FINAL_DB2",
-  password: "duncan123",
+  database: "dddproject",
+  password: "dddpostgres",
   port: 5432,
 });
 
@@ -346,6 +346,29 @@ app.put("/api/product/:id", (req, res) => {
   );
 });
 
+app.put("/api/orders/:id", (req, res) => {
+  const { id } = req.params;
+  const { status, deliveryplanid, deliverytype, deliveryprice, deliverydate,
+     shipdate, cardnumber, customerid } =
+    req.body;
+
+  pool.query(
+    "UPDATE orders SET status = $1, deliveryplanid = $2, deliverytype = $3, deliveryprice = $4, deliverydate = $5, shipdate = $6, cardnumber = $7, customerid = $8 WHERE orderid = $9",
+    [status, deliveryplanid, deliverytype, deliveryprice, deliverydate,
+      shipdate, cardnumber, customerid, id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rowCount === 0) {
+        res.status(404).json({ error: "Order not found" });
+      } else {
+        res.json({ message: "Order updated successfully" });
+      }
+    }
+  );
+});
+
 app.put("/api/staff/id/:id", (req, res) => {
   const { id } = req.params;
   const { name, address, salary, jobtitle } = req.body;
@@ -496,6 +519,25 @@ app.get("/api/product/:id", (req, res) => {
   );
 });
 
+app.get("/api/orders/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool.query(
+    "SELECT * FROM orders WHERE orderid = $1",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
 app.get("/api/productstock/:id", (req, res) => {
   const { id } = req.params;
 
@@ -577,6 +619,25 @@ app.get("/api/totalstock/id/:id", (req, res) => {
 
   pool.query(
     "SELECT ps.WarehouseID, SUM(p.Quantity) AS TotalStock FROM ProductStock ps JOIN Product p ON ps.ProductID = p.ProductID WHERE ps.WarehouseID = $1 GROUP BY ps.WarehouseID",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      } else if (result.rows.length === 0) {
+        res.status(404).json({ error: "Item not found" });
+      } else {
+        res.json(result.rows[0]);
+      }
+    }
+  );
+});
+
+app.get("/api/order_products/id/:id", (req, res) => {
+  const { id } = req.params;
+
+  pool.query(
+    "SELECT productid, quantity FROM order_products WHERE orderid = $1",
     [id],
     (err, result) => {
       if (err) {

@@ -96,14 +96,16 @@
     <table style="margin: 1rem;">
       <tr style="padding-left: 10px">
         <th>ID</th>
-        <th>Product</th>
+        <th>Product ID</th>
+        <th>Quantity</th>
         <th>Status</th>
         <th>Actions</th>
       </tr>
       <tr style="border: solid 1px; width: 50rem; height: 1px; background-color: rgba(0, 0, 0, 0.36); border-color: rgba(0, 0, 0, 0.163);"></tr>
       <tr *ngFor="let order of orders">
         <td>{{ order.orderid }}</td>
-        <td>{{ order.orderedproduct }}</td>
+        <td>{{ order.productid }}</td>
+        <td>{{ order.quantity }}</td>
         <td>{{ order.status }}</td>
         <td>
           <button class="btn" (click)="processOrder(order.orderid)">Change Order Status</button>
