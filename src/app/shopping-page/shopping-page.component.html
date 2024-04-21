@@ -1,6 +1,7 @@
 
 <br>
-<h1 class="page-title" style="display: flex;">Online Store Application   <h1 style="margin-left: 35rem; display: flex;">Balance: <p style="margin-left: 1rem;" class="price">${{this.customerBalance}}</p> </h1></h1>
+<h1 class="page-title" style="display: flex;">Online Store Application   <h1 style="margin-left: 35rem; display: flex;">Balance: <p style="margin-left: 1rem;" class="price">${{this.customerBalance}}</p> </h1>
+<button (click)="editAddressButton()" class="btn" style="margin-left: 10rem; background-color: rgb(133, 249, 133); width: auto; height: 4rem; font-size: medium;">Edit User</button></h1>
 <br>
 
 <!-- needs to be search, list, and shopping cart selection. -->
@@ -94,10 +95,10 @@
                 <h6 class="orderID">Order ID: {{ order.orderID }} <span class="orderID" style="margin-left: 4rem;"> Status: {{order.status }}</span></h6>
                 <span class="order-label"> Delivery Type: {{ order.deliveryType }} </span> 
                 <span class="order-label" style="display: flex;"> Order Total:   <p class="price" style="margin-left: .5rem;">  ${{ order.deliveryPrice }}</p></span> 
-                <span *ngIf="order.deliveryDate != null" style="margin-top: -2rem;" class="order-label"> Delivery Date: ${{ order.deliveryDate }} </span> 
+                <span *ngIf="order.deliveryDate != null" style="margin-top: -2rem;" class="order-label"> Delivery Date: {{ order.deliveryDate }} </span> 
                 <span *ngIf="order.deliveryDate == null" class="order-label"> Delivery Date: still pending... </span> 
                 <br>
-                <span *ngIf="order.shipDate != null" class="order-label"> Ship Date: ${{ order.shipDate }} </span> 
+                <span *ngIf="order.shipDate != null" class="order-label"> Ship Date: {{ order.shipDate }} </span> 
                 <span *ngIf="order.shipDate == null" class="order-label"> Ship Date: not yet shipped... </span> 
                 <br>
                 <br>
@@ -182,7 +183,7 @@
                 <br>
                 <br>
                 <div style="position: absolute; margin-left: 5rem; margin-top: 5rem; display: flex; align-items: center; align-content: center;">
-                <button class="btn" style="width: auto; background-color: rgb(243, 164, 243); font-size: smaller; color: whitesmoke">Edit</button>
+                <button class="btn" (click)="editCardButton(card)" style="width: auto; background-color: rgb(243, 164, 243); font-size: smaller; color: whitesmoke">Edit</button>
                 <button class="btn" (click)="deleteCard(card.cardNumber, card.cardAddressID)" style="margin-left: 1rem; width: auto; background-color: rgb(255, 119, 119); font-size: smaller; color: whitesmoke">Delete</button>
                 </div>
             </div>
@@ -222,6 +223,67 @@
           </form>
         </div>
 </div>
+
+<div *ngIf="editCard">
+    <div class="editcard">
+        <div class="card" style="margin-top: 2rem;  width:20rem; margin-left: 45rem; position: absolute; box-shadow: 0px 0px 2000px 2000px rgba(0, 0, 0, 0.544);">
+            <div class="card-header" style="display: flex;">          
+                <h5 class="card-title">Edit Card Address</h5>
+                <button (click)="closeEdit()" style="z-index: 4;  color: whitesmoke; background-color: rgb(255, 110, 110); width: auto; text-align: center; margin-left: 10rem">X</button>
+            </div>
+            <br> 
+            <form (ngSubmit)="saveChanges()">
+                <div style="margin-left: 2rem;" class="mb-3">
+                  <label for="cardAddress" style="font-size: small;" class="form-label">Card Address</label>
+                  <input
+                    type="input"
+                    id="cardAddress"
+                    class="form-control"
+                    [(ngModel)]="editForm.cardAddress"
+                    name="cardAddress"
+                    required
+                  />
+                </div>
+                <button type="submit" class=" btn addcard"> Save Changes </button>
+              </form>
+            </div>
+    </div>
+
+
+
+</div>
+
+<div *ngIf="editAddress">
+    <div class="editcard2">
+        <div class="card" style="margin-top: 2rem;  width:20rem; margin-left: 45rem; position: absolute; box-shadow: 0px 0px 2000px 2000px rgba(0, 0, 0, 0.544);">
+            <div class="card-header" style="display: flex;">          
+                <h5 class="card-title">Edit Users Address</h5>
+                <button (click)="closeEdit()" style="z-index: 4;  color: whitesmoke; background-color: rgb(255, 110, 110); width: auto; text-align: center; margin-left: 10rem">X</button>
+            </div>
+            <br> 
+            <form (ngSubmit)="changeAddress()">
+                <div style="margin-left: 2rem;" class="mb-3">
+                  <label for="cardAddress" style="font-size: small;" class="form-label">Delivery Address</label>
+                  <input
+                    type="input"
+                    id="cardAddress"
+                    class="form-control"
+                    [(ngModel)]="UserAddress.deliveryAddress"
+                    name="cardAddress"
+                    required
+                  />
+                </div>
+                <button type="submit" class=" btn addcard"> Save Changes </button>
+              </form>
+            </div>
+    </div>
+
+
+
+</div>
+
+
+
 
 
 </div>

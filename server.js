@@ -300,7 +300,7 @@ app.put("/api/addresses/:addressID", (req, res) => {
       } else if (result.rowCount === 0) {
         res.status(404).json({ error: "Item not found" });
       } else {
-        res.json({ message: "Card updated successfully" });
+        res.json(result.rows[0]);
       }
     }
   );

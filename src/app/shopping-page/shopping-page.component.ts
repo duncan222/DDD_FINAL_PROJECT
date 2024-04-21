@@ -82,25 +82,93 @@ export class ShoppingPageComponent implements OnInit{
   addressId: number = 0;
   addresses: Address[] = [];
   selectedCard: string = "";
-  cardForm: CardForm = {cardnumber: "", cardAddress: ""}
+  cardForm: CardForm = {cardnumber: "", cardAddress: ""};
+  editForm: Credit = {cardNumber: "", cardAddress: "", cardAddressID: 0};
   cards: any [] = []; 
   cards_and_address: any[] = [];
   cardSelection: string = "";
+  old_card: string = "";
   editCard: boolean = false;
+  editAddress: boolean = false;
+  UserAddress: Address = {   
+    uniqueAdressID: 0, 
+    paymentAddress: "",
+    deliveryAddress: "",
+  }
 
+  changeAddress(): void{ 
+    this.http.put<any>(`http://localhost:3000/api/addresses/${this.UserAddress.uniqueAdressID}`, {
+      paymentaddress: this.UserAddress.paymentAddress,
+      deliveryaddress: this.UserAddress.deliveryAddress, 
+    }).subscribe(
+      (response) => {
+        console.log(response); 
+        this.cards = [];
+        this.cards_and_address = []; 
+        this.getCards();
+        this.editAddress = false;
+      }, 
+      (error) => {
+        console.log(error)
+      }
+    );
+  }
 
-
+  editAddressButton(): void{ 
+    this.editAddress = true;
+  }
+  closeEdit(): void{ 
+    this.editCard = false;
+    this.editAddress = false;
+  }
+  
   orderButton(): void{ 
     this.postOrder(); 
   }
 
+  editCardButton(item: any){ 
+    this.editCard = true; 
+    this.old_card = item.cardNumber;
+    this.editForm.cardAddressID = item.cardAddressID;
+  }
+
+
+
+  saveChanges(): void{
+    console.log(this.editForm.cardAddress)
+    this.http.put<any>(`http://localhost:3000/api/addresses/${this.editForm.cardAddressID}`, {
+      paymentaddress: this.editForm.cardAddress,
+      deliveryaddress: this.UserAddress.deliveryAddress, 
+    }).subscribe(
+      (response) => {
+        console.log(response); 
+        this.cards = [];
+        this.cards_and_address = []; 
+        this.getCards();
+        this.editCard = false;
+      }, 
+      (error) => {
+        console.log(error)
+      }
+    );
+  }
+
+
+
   postOrder(): void{ 
+    var deliverydate: Date = new Date();
+    if(this.deliveryType == "standard"){
+      deliverydate.setDate(deliverydate.getDate() + 7);
+    }
+    else{
+      deliverydate.setDate(deliverydate.getDate() + 3);
+    }
     this.http.post<any>('http://localhost:3000/api/orders', {     
     Status: "issued",
     DeliveryType:this.deliveryType,
     DeliveryPrice:this.cartTotal,
-    DeliveryDate: new Date().toDateString,
-    ShipDate: new Date().toDateString,
+    DeliveryDate: deliverydate.toDateString(),
+    ShipDate: (new Date()).toDateString(),
     CardNumber: this.cardSelection, 
     CustomerID: this.customerID}).subscribe(
       (response) => {
@@ -192,6 +260,7 @@ export class ShoppingPageComponent implements OnInit{
   }).subscribe(
       (response) => {
         console.log(response)
+        this.cards_and_address = [];
         this.cards = [];
         this.getCards();
         console.log('Customer registration successfull', response);
@@ -239,8 +308,20 @@ export class ShoppingPageComponent implements OnInit{
     );
   }
 
-  putCard(): void{
 
+
+  putCard(): void{
+    this.http.put<any>(`http://localhost:3000/api/creditcard/${this.old_card}`, {
+      CardNumber: this.editForm.cardNumber,
+      CardAddresses: this.editForm.cardAddressID
+    }).subscribe(
+      (response) => {
+        console.log(response)
+        this.cards = []; 
+        this.cards_and_address = []; 
+        this.getCards(); 
+      }
+    );
   }
 
   deleteAddress(paymentaddressID: number): void{ 
@@ -278,6 +359,18 @@ export class ShoppingPageComponent implements OnInit{
           this.customerName = response.name;
           this.customerBalance = parseFloat(response.balance);
           this.addressId = response.customeraddressid;
+          this.http.get<any>(`http://localhost:3000/api/addresses/id/${this.addressId}`).subscribe(
+            (response) => {
+              this.UserAddress = {
+                uniqueAdressID: response.uniqueaddressid,
+                paymentAddress: response.paymentaddress,
+                deliveryAddress: response.deliveryaddress, 
+              }
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
         },
         (error) => {
           console.error('Error fetching staff info', error);
@@ -340,8 +433,8 @@ export class ShoppingPageComponent implements OnInit{
                   status: this.orders[i].status,
                   deliveryType: this.orders[i].deliverytype,
                   deliveryPrice: this.orders[i].deliveryprice,
-                  deliveryDate: this.orders[i].deliverydate,
-                  shipDate: this.orders[i].shipdate,
+                  deliveryDate:new Date(this.orders[i].deliverydate).toDateString(),
+                  shipDate: new Date(this.orders[i].shipdate).toDateString(),
                   orderItems: orderproducts
                 })
               }
@@ -468,6 +561,8 @@ export class ShoppingPageComponent implements OnInit{
       this.getProducts(); 
       this.getCards(); 
       this.getCustomerInfo(Number(this.customerID));
+
+
   }
 
 }
